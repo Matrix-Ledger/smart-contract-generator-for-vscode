@@ -17,7 +17,16 @@
         "command": "smart-contract-generator.generateSmartContract",
         "title": "Generate Smart Contract"
       }
-    ]
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "when": "editorHasSelection",
+          "command": "smart-contract-generator.generateSmartContract",
+          "group": "navigation",
+          "title": "Generate Smart Contract based on selection"
+        }
+      ]}
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
