@@ -1,4 +1,4 @@
-# smart-contract-generator README
+# MultiversX Smart Contract Generator README
 
 A copilot extension for your MultiversX smart contracts!
 Our model is optimized for MultiversX smart contracts in TypeScript.
