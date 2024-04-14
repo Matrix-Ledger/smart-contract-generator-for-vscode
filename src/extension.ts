@@ -32,10 +32,17 @@ export function activate(context: vscode.ExtensionContext) {
 			return;
 		}
 
+		const action = await vscode.window.showInformationMessage("What language are you using?", "TypeScript", "Rust");
+		const programmingLanguage = action?.toLowerCase();
+
+		console.log("Programming language:", programmingLanguage);
+
+		if (!programmingLanguage) { return; }
+
 		try {
 			const extractedPrompt = extractPromptFromComment(prompt);
-			const response = await axios.post(config.backendUrl, { description: extractedPrompt, language: "typescript" }, {
-			 	headers: { 'Content-Type': 'application/json' }
+			const response = await axios.post(config.backendUrl, { description: extractedPrompt, language: programmingLanguage }, {
+				headers: { 'Content-Type': 'application/json' }
 			});
 
 			insertTemporaryCode(editor, new vscode.Selection(selectionStart, selectionEnd), response.data.code);
@@ -43,7 +50,7 @@ export function activate(context: vscode.ExtensionContext) {
 		} catch (error) {
 			console.error("Error with custom backend:", error);
 			const errorMessage = (error as Error).message;
- 			vscode.window.showErrorMessage(`Failed to generate code: ${errorMessage}`);
+			vscode.window.showErrorMessage(`Failed to generate code: ${errorMessage}`);
 		}
 	});
 
@@ -53,7 +60,7 @@ export function activate(context: vscode.ExtensionContext) {
 async function insertTemporaryCode(editor: vscode.TextEditor, selection: vscode.Selection, code: string) {
 	const insertionPoint = new vscode.Position(selection.end.line, selection.end.character); // Declare the insertionPoint variable
 	editor.edit(editBuilder => {
-		editBuilder.insert(insertionPoint,`\n${code}\n\n`);
+		editBuilder.insert(insertionPoint, `\n${code}\n\n`);
 		editor.selection = new vscode.Selection(selection.start, selection.end);
 	});
 
